@@ -1,40 +1,53 @@
+async function getpokemon() {
+    try {
+        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=200");
+        const data = await res.json();
+        return data.results.map(pokemon => pokemon.name);
 
-//Aca que llame al Api y se convierta a JSON, luego se realiza una lista que almacene los datos y despúes se crean botones con su respectivo nombre, se recorren y se añaden al poke 
-fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
-    .then(response => response.json())
-    .then(data => {
-        const poke = document.getElementById('poke');
 
-        data.results.forEach(pokemon => { //La lista que se ha obtenido de la API y la recorre
-            const button = document.createElement('button');
-            button.innerHTML = pokemon.name;
-            button.addEventListener('click', () => pokemones(pokemon.name));
-            poke.appendChild(button);
-        });
-    });
-
-//Aca es para sacar la info de cada pokemon, otra vez se llama a la API y se convierte a JSON, despues se supone que al hacerle click se realiza lo del alert, pues en el anterior bloque al hacer click llama a esta funcion directamente
-function pokemones(name) {
-
-    fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-        .then(response => response.json())
-        .then(data => {
-            Swal.fire({
-                title: `${data.name}` ,
-                text: 'Modal with a custom image.',
-                imageUrl: `${(img) ? img : defectoImg}`,
-                html: ` 
-                    ${data.stats.map(data => ` 
-                    <input
-                    type="range"
-                    value="${data.base_stat}">
-                    <label>
-                    <b>${data.base_stat}<b>
-                    ${data.stat.name}
-                    </label><br>
-                    `).join("")}`,
-                imageWidth: "80%",
-                imageHeight: "80%",
-            });
-        });
+    } catch (error) {
+        console.error("Error en la lista de nombres de Pokémon:", error);
+        return [];
+    }
 }
+
+
+async function pokemon() {
+    const pokemonNames = await getpokemon();
+    const mainContainer = document.querySelector("section");
+    for (const name of pokemonNames) {
+        try {
+            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+            const pokemonData = await res.json();
+            const article = document.createElement("article");
+            article.innerHTML = `
+            <button class="show-image-button" src="${pokemonData.sprites.front_default}" </button>
+            <h2>${name}</h2>
+            `;
+            mainContainer.appendChild(article);
+
+
+            const showImageButton = article.querySelector(".show-image-button");
+            showImageButton.addEventListener("click", () => {
+                const imageUrl = pokemonData.sprites.front_default;
+
+               
+                Swal.fire({
+                    title: `${pokemonData.name}`,
+                    imageUrl: imageUrl,
+                    imageAlt: "Imagen del Pokémon",
+                    html: `${pokemonData.stats.map((data) => `
+                    <input type="range" value="${data.base_stat}">
+                    <label> ${data.stat.name}</label><br>
+                    `).join("")}`,
+                    showCloseButton: true,
+                });
+            });
+        } catch (error) {
+            console.error(`Error de información del ${name}:`, error);
+        }
+    }
+}
+
+
+pokemon();
