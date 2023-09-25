@@ -40,6 +40,9 @@ async function pokemon() {
                     <input type="range" value="${data.base_stat}">
                     <label> ${data.stat.name}</label><br>
                     `).join("")}`,
+                    imageWidth: "80%",
+                    imageHeight: "80%",
+                    
                     showCloseButton: true,
                 });
             });
