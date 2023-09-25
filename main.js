@@ -1,29 +1,40 @@
-let myPikachu = document.querySelector("#myPikachu");
 
-myPikachu.addEventListener("click", async()=>{
+//Aca que llame al Api y se convierta a JSON, luego se realiza una lista que almacene los datos y despúes se crean botones con su respectivo nombre, se recorren y se añaden al poke 
+fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
+    .then(response => response.json())
+    .then(data => {
+        const poke = document.getElementById('poke');
 
-    let res = await (await fetch("https://pokeapi.co/api/v2/pokemon/pikachu")).json();
+        data.results.forEach(pokemon => { //La lista que se ha obtenido de la API y la recorre
+            const button = document.createElement('button');
+            button.innerHTML = pokemon.name;
+            button.addEventListener('click', () => pokemones(pokemon.name));
+            poke.appendChild(button);
+        });
+    });
 
-    let img = res.sprites.front_default;
-    
-    let defectoImg = "https://media.tenor.com/8sTMqGWjYAQAAAAC/ball-pokemon.gif";
+//Aca es para sacar la info de cada pokemon, otra vez se llama a la API y se convierte a JSON, despues se supone que al hacerle click se realiza lo del alert, pues en el anterior bloque al hacer click llama a esta funcion directamente
+function pokemones(name) {
 
-
-    Swal.fire({
-        title: `${res.name}` ,
-        text: 'Modal with a custom image.',
-        imageUrl: `${(img) ? img : defectoImg}`,
-        html: ` 
-            ${res.stats.map(data => ` 
-            <input
-            type="range"
-            value="${data.base_stat}">
-            <label>
-            <b>${data.base_stat}<b>
-            ${data.stat.name}
-            </label><br>
-            `).join("")}`,
-        imageWidth: "80%",
-        imageHeight: "80%",
-      });
-});
+    fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+        .then(response => response.json())
+        .then(data => {
+            Swal.fire({
+                title: `${data.name}` ,
+                text: 'Modal with a custom image.',
+                imageUrl: `${(img) ? img : defectoImg}`,
+                html: ` 
+                    ${data.stats.map(data => ` 
+                    <input
+                    type="range"
+                    value="${data.base_stat}">
+                    <label>
+                    <b>${data.base_stat}<b>
+                    ${data.stat.name}
+                    </label><br>
+                    `).join("")}`,
+                imageWidth: "80%",
+                imageHeight: "80%",
+            });
+        });
+}
