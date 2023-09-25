@@ -12,3 +12,4 @@ Para este proyecto se pide crear botones que al presionarlos se pueda ver la inf
 
 #### Resultado
 
+![](resul.png)
