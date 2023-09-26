@@ -41,7 +41,8 @@ document.addEventListener("DOMContentLoaded", async(e)=>{
 })
 
 
-async function getpokemon() {
+
+async function vengaPokemon() {
     try {
         const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=200");
         const data = await res.json();
@@ -56,22 +57,23 @@ async function getpokemon() {
 
 
 async function pokemon() {
-    const pokemonNames = await getpokemon();
-    const mainContainer = document.querySelector("section");
-    for (const name of pokemonNames) {
+    const nombres = await vengaPokemon();
+    const principal = document.querySelector("section");
+    for (const name of nombres) {
         try {
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
             const pokemonData = await res.json();
             const article = document.createElement("article");
             article.innerHTML = `
-            <button class="show-image-button" src="${pokemonData.sprites.front_default}" </button>
-            <h2>${name}</h2>
+            <img src="${pokemonData.sprites.front_default}"/>  
+            <button class="botones" src="${pokemonData.sprites.front_default}"><h2 id="h2">${name}</h2></button>
+            <img src="${pokemonData.sprites.front_default}"/>
             `;
-            mainContainer.appendChild(article);
+            principal.appendChild(article);
 
 
-            const showImageButton = article.querySelector(".show-image-button");
-            showImageButton.addEventListener("click", () => {
+            const muestreBoton = article.querySelector(".botones");
+            muestreBoton.addEventListener("click", () => {
                 const imageUrl = pokemonData.sprites.front_default;
 
                //ESTO SE UTILIZA
