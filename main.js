@@ -89,7 +89,7 @@ prueba.addEventListener("submit" ,async(e)=>{
 
 
     let config ={
-        method: "PUT",
+        method: "POST",
         headers: {"content-type": "application/json"},
         body: JSON.stringify(enviar)
     }
