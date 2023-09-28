@@ -18,7 +18,7 @@ const pokemon = async()=> {
         const article = document.createElement("article");
         article.innerHTML = `
         <img src="${res.sprites.front_default}"/>  
-        <button class="botones" src="${res.sprites.front_default}"><h2 id="h2">${name}</h2></button>
+        <button class="botones" id="principal" src="${res.sprites.front_default}"><h2 id="h2">${name}</h2></button>
         <img src="${res.sprites.front_default}"/>
         `;
         principal.appendChild(article);
@@ -28,7 +28,6 @@ const pokemon = async()=> {
         muestreBoton.addEventListener("click", () => {
             const imageUrl = res.sprites.front_default;
 
-            //ESTO SE UTILIZA
             Swal.fire({
 
                 title: `${res.name}`,
@@ -51,7 +50,7 @@ const pokemon = async()=> {
             });
 
     muestreBoton.addEventListener("submit" ,async(e)=>{
-          e.preventDefault();
+        e.preventDefault();
     
         let enviar = Object.fromEntries(new FormData (e.target));
     
@@ -81,4 +80,3 @@ const pokemon = async()=> {
 }
 
 pokemon();
-
