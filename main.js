@@ -1,5 +1,4 @@
 const url = "https://6509e7ebf6553137159c3aee.mockapi.io/Pokemon";
-let prueba = document.querySelector('form')
 
 
 const vengaPokemon = async () =>{
@@ -38,36 +37,34 @@ const pokemon = async()=> {
                     ${res.stats.map((data) =>`
                     <div>
                         <input type="range" value="${data.base_stat}" name="${data.stat.name}">
-                        <label data-name="${data.stat.name}"><b>${data.base_stat}<b> ${data.stat.name}</label><br>
+                        <label data-name="${data.stat.name}"><b>${data.base_stat}</b> <b>${data.stat.name}</b></label><br>
                     </div>
                     `).join("")}
-                        <input type="submit" value="Enviar"/> 
+                        <input type="submit" class="segundo_boton" value="Enviar"/> 
                 </form>
                         
-                    `,//Esto
+                    `,
                 imageWidth: "80%",
                 imageHeight: "80%"
             });
-
-    muestreBoton.addEventListener("submit" ,async(e)=>{
+    
+    muestreBoton.addEventListener("click" ,async(e)=>{
         e.preventDefault();
     
         let enviar = Object.fromEntries(new FormData (e.target));
     
         const res = await (await fetch(url)).json();
     
-                
+        let config ={
+            method: "POST",
+            headers: {"content-type": "application/json"},
+            body: JSON.stringify(enviar)
+        }
             
-                let config ={
-                    method: "POST",
-                    headers: {"content-type": "application/json"},
-                    body: JSON.stringify(enviar)
-                }
-            
-                const x = await (await fetch(url,config)).json();
-            
-                console.log(x)
-            })
+        const x = await (await fetch(url,config)).json();
+        
+
+        })
 
             let contenedor = document.querySelector('#swal2-html-container');
             contenedor.addEventListener("input", (e)=>{
@@ -80,3 +77,25 @@ const pokemon = async()=> {
 }
 
 pokemon();
+
+const prueba = document.querySelectorAll('form')
+
+prueba.addEventListener("submit" ,async(e)=>{
+    e.preventDefault();
+
+    let enviar = Object.fromEntries(new FormData (e.target));
+
+    const res = await (await fetch(url)).json();
+
+
+    let config ={
+        method: "PUT",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify(enviar)
+    }
+
+    const x = await (await fetch(url,config)).json();
+
+    console.log(x)
+});
+
