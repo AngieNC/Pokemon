@@ -3,7 +3,7 @@ const url = "https://6509e7ebf6553137159c3aee.mockapi.io/Pokemon";
 
 const vengaPokemon = async () =>{
 
-    const res = await(await fetch("https://pokeapi.co/api/v2/pokemon?limit=200")).json();
+    const res = await(await fetch("https://pokeapi.co/api/v2/pokemon?limit=500")).json();
     return res.results.map(pokemon => pokemon.name)
 }
 
