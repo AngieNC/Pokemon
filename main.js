@@ -1,13 +1,14 @@
 const url = "https://6509e7ebf6553137159c3aee.mockapi.io/Pokemon";
 
-
+//Se traen los datos de la PokeAPI
 const vengaPokemon = async () =>{
 
-    const res = await(await fetch("https://pokeapi.co/api/v2/pokemon?limit=500")).json();
+    const res = await(await fetch("https://pokeapi.co/api/v2/pokemon?limit=200")).json();
     return res.results.map(pokemon => pokemon.name)
+
 }
 
-
+//Se crea el alert con ayuda de sweetAlert llamando a los principales datos de la PokeAPI para crear nuestras tarjetas
 const pokemon = async()=> {
     const nombres = await vengaPokemon();
     const principal = document.querySelector("section");
@@ -22,7 +23,7 @@ const pokemon = async()=> {
         `;
         principal.appendChild(div);
 
-
+        //Cuando se despliega el alert al oprimir el boton principal
         const muestreBoton = div.querySelector(".botones");
         muestreBoton.addEventListener("click", () => {
             const imageUrl = res.sprites.front_default;
@@ -33,7 +34,7 @@ const pokemon = async()=> {
                 imageUrl: imageUrl,
                 imageAlt: "Imagen del Pokémon",
                 html: `
-                <form>
+                <form id="formulario-${name}">
                     ${res.stats.map((data) =>`
                     <div>
                         <input type="range" value="${data.base_stat}" name="${data.stat.name}">
@@ -41,6 +42,7 @@ const pokemon = async()=> {
                     </div>
                     `).join("")}
                         <input type="submit" class="segundo_boton" value="Enviar"/> 
+                        <button class="segundo_boton" id="actualizar">Actualizar</button>
                 </form>
                         
                     `,
@@ -48,23 +50,60 @@ const pokemon = async()=> {
                 imageHeight: "80%"
             });
     
-    muestreBoton.addEventListener("click" ,async(e)=>{
-        e.preventDefault();
-    
-        let enviar = Object.fromEntries(new FormData (e.target));
-    
-        const res = await (await fetch(url)).json();
-    
-        let config ={
-            method: "POST",
-            headers: {"content-type": "application/json"},
-            body: JSON.stringify(enviar)
-        }
-            
-        const x = await (await fetch(url,config)).json();
-        
 
-        })
+    //Se crea un objeto en la base de datos
+    const formulario = document.querySelector(`#formulario-${name}`);
+
+    formulario.addEventListener("submit", async(e)=>{
+        e.preventDefault();
+
+        const paso = Object.fromEntries(new FormData (e.target));
+
+        try{
+            const config = {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(paso) 
+            }
+
+            const res = await fetch(url, config);
+
+            if (res.ok){
+                console.log("Datos enviados :)");
+            }else{
+                console.error("ERROR, datos no se enviaron");
+            }
+        }catch (error){
+            console.error("ERROR, datos no se enviaron",error);
+        }
+    })
+
+
+    //Aca debe de actualizar (x)
+    const update = formulario.querySelector("#actualizar");
+    
+    update.addEventListener("click", async()=>{
+
+        const paso = Object.fromEntries(new FormData (formulario));
+
+        try{
+            const config = {
+                method: "PUT",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(paso) 
+            }
+
+            const res = await fetch(`${url}/${name}`, config);
+
+            if (res.ok){
+                console.log("Datos enviados :)");
+            }else{
+                console.error("ERROR, datos no se enviaron");
+            }
+        }catch (error){
+            console.error("ERROR, datos no se enviaron",error);
+        }
+    })
 
             let contenedor = document.querySelector('#swal2-html-container');
             contenedor.addEventListener("input", (e)=>{
@@ -78,24 +117,4 @@ const pokemon = async()=> {
 
 pokemon();
 
-const prueba = document.querySelectorAll('form')
-
-prueba.addEventListener("submit" ,async(e)=>{
-    e.preventDefault();
-
-    let enviar = Object.fromEntries(new FormData (e.target));
-
-    const res = await (await fetch(url)).json();
-
-
-    let config ={
-        method: "POST",
-        headers: {"content-type": "application/json"},
-        body: JSON.stringify(enviar)
-    }
-
-    const x = await (await fetch(url,config)).json();
-
-    console.log(x)
-});
 
