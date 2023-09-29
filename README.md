@@ -34,7 +34,7 @@ Facilitarle al usuario los nombres de los 500 primeros pokemon y que pueda conoc
 
 
 
-3. Ahora podrás jugar con sus configuraciones, pero esta función esta inhabilitada por el momento, lo sentimos.
+3. Ahora podrás jugar con sus configuraciones, y se te verán los resultados en la API, pero no en la pantalla.
 
 #### Autora:
 
