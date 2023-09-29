@@ -14,16 +14,16 @@ const pokemon = async()=> {
     for (const name of nombres) {
         
         const res = await (await  fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)).json();
-        const article = document.createElement("article");
-        article.innerHTML = `
+        const div = document.createElement("div");
+        div.innerHTML = `
         <img src="${res.sprites.front_default}"/>  
         <button class="botones" id="principal" src="${res.sprites.front_default}"><h2 id="h2">${name}</h2></button>
         <img src="${res.sprites.front_default}"/>
         `;
-        principal.appendChild(article);
+        principal.appendChild(div);
 
 
-        const muestreBoton = article.querySelector(".botones");
+        const muestreBoton = div.querySelector(".botones");
         muestreBoton.addEventListener("click", () => {
             const imageUrl = res.sprites.front_default;
 
